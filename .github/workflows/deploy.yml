@@ -1,0 +1,81 @@
+#Description:
+#This workflow just deploys and that's it.
+
+name: deploy
+on:
+  workflow_dispatch:
+
+
+
+env:
+  SERVICE_NAME: warden                     
+  PROD_COMPOSE_PATH: ./docker-compose.monitoring.yaml
+
+
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      PROD_SSH_DEPLOY_TARGET_PATH: "/srv/${{ github.event.repository.name }}"
+    steps:
+      - uses: actions/checkout@v4
+        with: 
+          sparse-checkout: |
+            ${{ env.PROD_COMPOSE_PATH }}
+            services
+            inject_env.sh
+
+      - name: Create a .env file.
+        run: |
+          cat <<EOF > .env
+          #---------------Application envs are below-------------
+          GIT_COMMIT=${{ github.sha }}
+          APP_NAME=${{ env.SERVICE_NAME }}
+
+          GF_SECURITY_ADMIN_USER=${{ secrets.GF_SECURITY_ADMIN_USER }}
+          GF_SECURITY_ADMIN_PASSWORD=${{ secrets.GF_SECURITY_ADMIN_PASSWORD }}
+          GF_SERVER_ROOT_URL=${{ secrets.GF_SERVER_ROOT_URL }}
+          GF_USERS_ALLOW_SIGN_UP=false
+          GF_AUTH_ANONYMOUS_ENABLED=false
+          #-------------------------------------------------------
+          EOF
+
+      - name: Inject envs in configurations (.yml/.yaml)
+        run: |
+          cat <<EOF > .inject.env
+          #---------------Application envs are below-------------
+          ALERTMANAGER_TELEGRAM_TOKEN=${{ secrets.ALERTMANAGER_TELEGRAM_TOKEN }}
+          ALERTMANAGER_TELEGRAM_CHAT_ID=${{ secrets.ALERTMANAGER_TELEGRAM_CHAT_ID }}
+          #-------------------------------------------------------
+          EOF
+          
+          #This will inject envs above into all .yml/yaml files inside serivces.
+          bash inject_env.sh --env-file=./.inject.env --root-path=./services
+
+
+      - uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_DEPLOY_KEY }}
+          ARGS: "-rlgoDzvc --delete --inplace"
+          REMOTE_HOST: ${{ secrets.PROD_SSH_DEPLOY_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_DEPLOY_USERNAME }}
+          SOURCE: "./"
+          TARGET: "${{ env.PROD_SSH_DEPLOY_TARGET_PATH }}"
+          SCRIPT_AFTER: |
+            sudo chown -R ${{ secrets.PROD_SSH_DEPLOY_USERNAME }}:${{ secrets.PROD_SSH_DEPLOY_USERNAME }} ${{ env.PROD_SSH_DEPLOY_TARGET_PATH }}
+
+      - name: Run deploy script
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.PROD_SSH_DEPLOY_HOST }}
+          username: ${{ secrets.PROD_SSH_DEPLOY_USERNAME }}
+          key: ${{ secrets.PROD_SSH_DEPLOY_KEY }}
+          script: |
+            set -e
+            cd ${{ env.PROD_SSH_DEPLOY_TARGET_PATH }}
+            echo "GIT_COMMIT: $GIT_COMMIT"
+            docker compose up -d
+
+
