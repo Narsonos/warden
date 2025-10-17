@@ -24,7 +24,7 @@ Contains:
 Prometheus rules are defined under services/prometheus/rules. Each file contains recording rules (precomputed metrics) and alerting rules used by Alertmanager.
 
 - services/prometheus/rules/system.yml
-  - Recording rules: cpu and per-CPU load, RAM load, filesystem free/used/total per mountpoint, disk IO and throughput, network in/out and error/drop rates.
+  - Recording rules: cpu and per-CPU load (note: cpu temperatures graph needs to be fixed!), RAM load, filesystem free/used/total per mountpoint, disk IO and throughput, network in/out and error/drop rates.
   - Alerts: CpuOver90, RamOver90, DiskSpaceLow, DiskLoadOver90 — thresholds for CPU/RAM/disk health.
 
 - services/prometheus/rules/api.yml
