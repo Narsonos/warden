@@ -1,6 +1,7 @@
 # Monitoring/Observability subsystem template
 This repo contains a template of a monitoring/observability subsystem based on Grafana/OTEL stack.
 It can be used for pretty much any small/medium sized project that has Users and Authorization and exports expected metrics.
+👉 Initially, developed as a part of my [ FastAPI monolith template](https://github.com/Narsonos/fapi_monobase)
 
 Contains:
 - Grafana with provisioned dadatsources and dashboards split onto 3 cathegories (System, API, Domain)
