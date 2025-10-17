@@ -1,4 +1,4 @@
-# Monitoring/Observability subsystem template
+# Warden: a monitoring/observability subsystem template
 This repo contains a template of a monitoring/observability subsystem based on Grafana/OTEL stack.
 It can be used for pretty much any small/medium sized project that has Users and Authorization and exports expected metrics.
 Or...just tweak it to your needs!
