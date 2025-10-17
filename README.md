@@ -1,16 +1,18 @@
 # Monitoring/Observability subsystem template
 This repo contains a template of a monitoring/observability subsystem based on Grafana/OTEL stack.
 It can be used for pretty much any small/medium sized project that has Users and Authorization and exports expected metrics.
-👉 Initially, developed as a part of my [ FastAPI monolith template](https://github.com/Narsonos/fapi_monobase)
+Or...just tweak it to your needs!
+
+👉 Initially, developed as a part of my [FastAPI monolith template](https://github.com/Narsonos/fapi_monobase).
 
 Contains:
-- Grafana with provisioned dadatsources and dashboards split onto 3 cathegories (System, API, Domain)
-- Prometheus with pre-set rules and alerts 
-- Alertmanager with alerts to Telegram
-- Loki that expects to recieve logs
-- Tempo with OTel-Collector for collecting traces
-- Nginx that serves as reverse proxy
-- A simple github actions deployment .yml file
+- Grafana with provisioned datasources and dashboards split onto 3 cathegories (System, API, Domain);
+- Prometheus with pre-set rules and alerts; 
+- Alertmanager with alerts to Telegram;
+- Loki that expects to recieve logs;
+- Tempo with OTel-Collector for collecting traces;
+- Nginx that serves as reverse proxy;
+- A simple github actions deployment .yml file;
 - An inject_env.sh script that goes over all .yml|.yaml files and substitutes .env placeholders during deploy with .envs passed in deploy.yml file. That allows to hide sensetive data. Please, take into account that inject_env.sh is not idempotent - it overwrites placeholders with known env vars values.
 
 **Relationships between the services are visualised below:**
