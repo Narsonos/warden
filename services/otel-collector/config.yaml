@@ -6,6 +6,9 @@ receivers:
       http:
 
 
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:9000
 
 
 exporters:
@@ -38,3 +41,5 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [prometheus]
+
+  extensions: [health_check]

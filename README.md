@@ -9,6 +9,12 @@ Contains:
 - Loki that expects to recieve logs
 - Tempo with OTel-Collector for collecting traces
 - Nginx that serves as reverse proxy
+- A simple github actions deployment .yml file
+- An inject_env.sh script that goes over all .yml|.yaml files and substitutes .env placeholders during deploy with .envs passed in deploy.yml file. That allows to hide sensetive data. Please, take into account that inject_env.sh is not idempotent - it overwrites placeholders with known env vars values.
+
+Relationships between the services are visualised below:
+![Project architecture](diagram.svg)
+
 
 ## Prometheus config & rules (what's in the repo)
 Prometheus rules are defined under services/prometheus/rules. Each file contains recording rules (precomputed metrics) and alerting rules used by Alertmanager.
