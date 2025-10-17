@@ -5,7 +5,7 @@ Or...just tweak it to your needs!
 
 👉 Initially, developed as a part of my [FastAPI monolith template](https://github.com/Narsonos/fapi_monobase).
 
-Contains:
+### This repo contains:
 - Grafana with provisioned datasources and dashboards split onto 3 cathegories (System, API, Domain);
 - Prometheus with pre-set rules and alerts; 
 - Alertmanager with alerts to Telegram;
@@ -15,7 +15,7 @@ Contains:
 - A simple github actions deployment .yml file;
 - An inject_env.sh script that goes over all .yml|.yaml files and substitutes .env placeholders during deploy with .envs passed in deploy.yml file. That allows to hide sensetive data. Please, take into account that inject_env.sh is not idempotent - it overwrites placeholders with known env vars values.
 
-**Relationships between the services are visualised below:**
+### Relationships between the services are visualised below:**
 
 ![Project architecture](diagram.svg)
 
